@@ -1,5 +1,4 @@
 import { Button } from "./ui/button";
-import { useKeplrAddress } from "@/keplr";
 import { MsgNewIntent } from "@/proto/wardenprotocol/intent/tx_pb";
 import { BoolparserIntent, IntentParticipant } from "@/proto/wardenprotocol/intent/intent_pb";
 import { Any } from "@bufbuild/protobuf";
@@ -8,9 +7,10 @@ import { useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useBroadcaster } from "@/hooks/keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 function NewIntentButton() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { broadcast } = useBroadcaster();
   const [name, setName] = useState("");
   const [intentDefinition, setIntentDefinition] = useState("");
@@ -102,7 +102,7 @@ function NewIntentButton() {
 
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit" onClick={() => createIntent(addr, name, intentDefinition, participants)}>Create</Button>
+            <Button type="submit" onClick={() => createIntent(address, name, intentDefinition, participants)}>Create</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

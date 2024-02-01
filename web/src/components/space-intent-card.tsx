@@ -6,12 +6,12 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useBroadcaster } from "@/hooks/keplr";
-import { useKeplrAddress } from "@/keplr";
 import { MsgUpdateSpace } from "@/proto/wardenprotocol/identity/tx_pb";
 import IntentPreviewCard from "./intent-preview-card";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 export default function SpaceIntentCard({ space }: { space: Space }) {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { broadcast } = useBroadcaster();
   const [editMode, setEditMode] = useState(false);
 
@@ -26,7 +26,7 @@ export default function SpaceIntentCard({ space }: { space: Space }) {
           setEditMode(false);
           await broadcast([
             new MsgUpdateSpace({
-              creator: addr,
+              creator: address,
               spaceAddr: space.address,
               adminIntentId: BigInt(adminIntentId),
               signIntentId: BigInt(signIntentId),

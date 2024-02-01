@@ -1,14 +1,14 @@
 import { Button } from "./ui/button";
-import { useKeplrAddress } from "@/keplr";
 import { MsgNewKeychain } from "@/proto/wardenprotocol/identity/tx_pb";
 import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useBroadcaster } from "@/hooks/keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 function NewKeychainButton() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { broadcast } = useBroadcaster();
   const [description, setDescription] = useState("");
 
@@ -44,7 +44,7 @@ function NewKeychainButton() {
 
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit" onClick={() => createKeychain(addr, description)}>Create</Button>
+            <Button type="submit" onClick={() => createKeychain(address, description)}>Create</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

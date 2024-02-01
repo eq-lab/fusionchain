@@ -1,4 +1,3 @@
-import { useKeplrAddress } from "@/keplr";
 import { useBroadcaster } from "./keplr";
 import { MsgNewSignTransactionRequest, MsgNewSignTransactionRequestResponse } from "@/proto/wardenprotocol/treasury/tx_pb";
 import { TxMsgData } from "cosmjs-types/cosmos/base/abci/v1beta1/abci";
@@ -7,6 +6,7 @@ import { SignRequest, SignRequestStatus } from "@/proto/wardenprotocol/treasury/
 import { useState } from "react";
 import { AnyMessage, Message } from "@bufbuild/protobuf";
 import { packAny } from "@/utils/any";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 export enum SignTransactionRequesterState {
   IDLE = "idle",
@@ -17,7 +17,7 @@ export enum SignTransactionRequesterState {
 }
 
 export default function useRequestTransactionSignature() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { broadcast } = useBroadcaster();
   const [state, setState] = useState<SignTransactionRequesterState>(SignTransactionRequesterState.IDLE);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -33,7 +33,7 @@ export default function useRequestTransactionSignature() {
 
         const res = await broadcast([
           new MsgNewSignTransactionRequest({
-            creator: addr,
+            creator: address,
             keyId: BigInt(keyId),
             walletType: 2,
             unsignedTransaction: unsignedTx,

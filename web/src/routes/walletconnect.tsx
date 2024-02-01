@@ -9,7 +9,6 @@ import { AuthEngineTypes } from "@walletconnect/auth-client";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { keys } from '@/client/treasury';
 import { WalletType } from '@/proto/wardenprotocol/treasury/wallet_pb';
-import { useKeplrAddress } from '@/keplr';
 import { fromHex } from '@cosmjs/encoding';
 import Web3 from 'web3';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -22,6 +21,7 @@ import SignTransactionRequestDialog from '@/components/sign-transaction-request-
 import useRequestSignature from '@/hooks/useRequestSignature';
 import SignatureRequestDialog from '@/components/signature-request-dialog';
 import { MetadataEthereum } from '@/proto/wardenprotocol/treasury/tx_pb';
+import { useAddressContext } from '@/def-hooks/addressContext';
 
 function useWeb3Wallet(relayUrl: string) {
   const [w, setW] = useState<IWeb3Wallet | null>(null);
@@ -219,14 +219,14 @@ export default function WalletConnectPage() {
 }
 
 function WalletConnect() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { state: reqSignatureState, error: reqSignatureError, requestSignature, reset: resetReqSignature } = useRequestSignature();
   const { state: reqTxSignatureState, error: reqTxSignatureError, requestTransactionSignature, reset: resetReqTxSignature } = useRequestTransactionSignature();
   const { w, sessionProposals, sessionRequests, activeSessions } = useWeb3Wallet('wss://relay.walletconnect.org');
   const [loading, setLoading] = useState(false)
   const [uri, setUri] = useState("");
   const [wsAddr, setWsAddr] = useState("");
-  const wsQuery = useQuery({ queryKey: ["spaces", "owner", addr], queryFn: () => spacesByOwner(addr) });
+  const wsQuery = useQuery({ queryKey: ["spaces", "owner", address], queryFn: () => spacesByOwner(address) });
 
   if (wsQuery.isLoading) {
     return <div>Loading...</div>

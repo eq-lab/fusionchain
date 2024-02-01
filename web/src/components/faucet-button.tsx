@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useKeplrAddress } from "../keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 import { Button } from "@/components/ui/button";
 
 const FAUCET_URL = import.meta.env.VITE_FAUCET_URL || "/api/faucet";
@@ -13,13 +13,13 @@ async function getFaucetTokens(addr: string) {
 
 function FaucetButton() {
   const [loading, setLoading] = useState(false);
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
 
-  console.log("FaucetButton", addr);
+  console.log("FaucetButton", address);
 
   const getTokens = async () => {
     setLoading(true);
-    await getFaucetTokens(addr);
+    await getFaucetTokens(address);
     setLoading(false);
   };
 

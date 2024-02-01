@@ -1,9 +1,7 @@
 import { Link, Params } from "react-router-dom";
 import { Button } from "./ui/button";
-import { useKeplrAddress } from "@/keplr";
 import { useQuery } from "@tanstack/react-query";
 import { keychains } from "@/client/identity";
-// import { MsgNewKeychain } from "@/proto/wardenprotocol/identity/tx_pb";
 import {
 	Sheet,
 	SheetClose,
@@ -23,14 +21,11 @@ import {
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-// import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useBroadcaster } from "@/hooks/keplr";
 
@@ -61,6 +56,7 @@ import ProgressStep from "@/components/ui/progress-step";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 const FormSchema = z.object({});
 
@@ -297,7 +293,7 @@ function KeyRequestDialog({
 }
 
 function NewKeyButton() {
-	const addr = useKeplrAddress();
+	const { address } = useAddressContext();
 
 	// const [keychainAddress, setKeychainAddress] = useState("");
 	const [keychainAddress, setKeychainAddress] = useKeychainAddress();
@@ -420,7 +416,7 @@ function NewKeyButton() {
 								onClick={() =>
 									requestKey(
 										keychainAddress,
-										addr,
+										address,
 										spaceAddress
 									)
 								}

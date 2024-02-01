@@ -27,14 +27,14 @@ import (
 )
 
 func (k Keeper) SpacesByOwner(goCtx context.Context, req *types.QuerySpacesByOwnerRequest) (*types.QuerySpacesResponse, error) {
-	if req == nil {
+	if req == nil || req.Owner == "" {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	spaces, pageRes, err := query.CollectionFilteredPaginate(ctx, k.spaces, req.Pagination, func(key []byte, value types.Space) (bool, error) {
-		return !value.IsOwner(req.Owner), nil
+		return value.IsOwner(req.Owner), nil
 	}, func(k []byte, s types.Space) (types.Space, error) { return s, nil })
 
 	if err != nil {

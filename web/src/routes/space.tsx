@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLoaderData } from "react-router";
 import { Link, Params } from "react-router-dom";
-import { useKeplrAddress } from "../keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 import { MsgNewKeyRequest, MsgNewKeyRequestResponse } from "../proto/wardenprotocol/treasury/tx_pb";
 import { KeyRequest, KeyRequestStatus, KeyType } from "../proto/wardenprotocol/treasury/key_pb";
 import Keys from "../components/keys";
@@ -173,7 +173,7 @@ function KeyRequestDialog({ state, error, keyRequest, reset }: { state: KeyReque
 }
 
 function Space() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const [keychainAddress, _] = useKeychainAddress();
   const { broadcast } = useBroadcaster();
   const { state, error, keyRequest, requestKey, reset } = useKeyRequester();

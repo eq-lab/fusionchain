@@ -1,4 +1,3 @@
-import { useKeplrAddress } from "@/keplr";
 import { useBroadcaster } from "./keplr";
 import { MsgNewSignatureRequest, MsgNewSignatureRequestResponse } from "@/proto/wardenprotocol/treasury/tx_pb";
 import { TxMsgData } from "cosmjs-types/cosmos/base/abci/v1beta1/abci";
@@ -6,6 +5,7 @@ import { signatureRequestByID } from "@/client/treasury";
 import { SignRequest, SignRequestStatus } from "@/proto/wardenprotocol/treasury/signature_pb";
 import { useState } from "react";
 import { protoInt64 } from "@bufbuild/protobuf";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 export enum SignatureRequesterState {
   IDLE = "idle",
@@ -16,7 +16,7 @@ export enum SignatureRequesterState {
 }
 
 export default function useRequestSignature() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { broadcast } = useBroadcaster();
   const [state, setState] = useState<SignatureRequesterState>(SignatureRequesterState.IDLE);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -32,7 +32,7 @@ export default function useRequestSignature() {
 
         const res = await broadcast([
           new MsgNewSignatureRequest({
-            creator: addr,
+            creator: address,
             keyId: protoInt64.parse(keyId),
             dataForSigning: data,
           }),

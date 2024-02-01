@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { actionsByAddress } from "@/client/intent";
 import { ActionStatus } from "@/proto/wardenprotocol/intent/action_pb";
-import { useKeplrAddress } from "@/keplr";
-import Action from "./action";
+import Action from "./Action.1";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -12,18 +11,19 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 
 export default function Actions() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const q = useQuery({
-		queryKey: ["actions", "completed", addr],
-		queryFn: () => actionsByAddress(addr, ActionStatus.COMPLETED),
+		queryKey: ["actions", "completed", address],
+		queryFn: () => actionsByAddress(address, ActionStatus.COMPLETED),
 		// queryFn: () => actionsByAddress(addr),
   });
   const qpending = useQuery({
-		queryKey: ["actions", "pending", addr],
-		queryFn: () => actionsByAddress(addr, ActionStatus.PENDING),
+		queryKey: ["actions", "pending", address],
+		queryFn: () => actionsByAddress(address, ActionStatus.PENDING),
 		// queryFn: () => actionsByAddress(addr),
 	});
   if (!q.data) {
@@ -69,7 +69,7 @@ export default function Actions() {
 					>
 						{pendingcount && pendingcount !== "0" ? (
 							<>
-								{qpending.data.actions.map((action) => (
+								{qpending.data?.actions.map((action) => (
 									<AccordionItem
 										value={`item-${action?.id.toString()}`}
 										className="p-4 border rounded-lg hover:border-white"

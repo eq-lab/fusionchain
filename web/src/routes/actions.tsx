@@ -1,8 +1,8 @@
-import { useKeplrAddress } from "../keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 import Actions from "@/components/actions";
 
 function ActionsPage() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   if (!addr) {
     return (
       <div className="px-6 mt-10">

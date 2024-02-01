@@ -2,27 +2,27 @@ import { QueryKeychainByAddressResponse, QueryKeychainsResponse, QuerySpaceByAdd
 import { PaginatedResponse, path, query } from "./common";
 
 export async function spaces() {
-  const data = await query(path(["wardenprotocol", "identity", "spaces"]));
+  const data = await query(path(["wardenprotocol", "warden", "warden", "spaces"]));
   return QuerySpacesResponse.fromJson(data);
 }
 
 export async function spacesByOwner(owner: string) {
-  const data = await query(path(["wardenprotocol", "identity", "spaces_by_owner"], { owner }));
+  const data = await query(path(["wardenprotocol", "warden", "warden", "spaces_by_owner"], { owner }));
   return QuerySpacesResponse.fromJson(data);
 }
 
 export async function spaceByAddress(address: string) {
-  const data = await query(path(["wardenprotocol", "identity", "space_by_address"], { address }));
+  const data = await query(path(["wardenprotocol", "warden", "warden", "space_by_address"], { address }));
   return QuerySpaceByAddressResponse.fromJson(data);
 }
 
 export async function keychains() {
-  const data = await query(path(["wardenprotocol", "identity", "keychains"]));
+  const data = await query(path(["wardenprotocol", "warden", "warden", "keychains"]));
   return QueryKeychainsResponse.fromJson(data);
 }
 
 export async function keychainByAddress(address: string) {
-  const data = await query(path(["wardenprotocol", "identity", "keychain_by_address"], { address }));
+  const data = await query(path(["wardenprotocol", "warden", "warden", "keychain_by_address"], { address }));
   return QueryKeychainByAddressResponse.fromJson(data);
 }
 
@@ -52,5 +52,5 @@ export type ActionsResponse = PaginatedResponse & {
 };
 
 export function actions(): Promise<ActionsResponse> {
-  return query(path(["wardenprotocol", "identity", "actions"]));
+  return query(path(["wardenprotocol", "warden", "warden", "actions"]));
 }

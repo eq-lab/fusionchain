@@ -1,54 +1,22 @@
 import { txByHash } from "@/client/chain";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { TxResponse, keplrBuildAndBroadcast } from "@/newclient";
-import { Message } from "@bufbuild/protobuf";
-import { ToastAction } from "@radix-ui/react-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { DeliverTxResponse } from "@cosmjs/stargate";
 import { Link } from "react-router-dom";
 
 export function useBroadcaster() {
-  const { toast } = useToast();
-
-  const broadcast = async (msgs: Message<any>[]) => {
-    let id: string | null = null;
-    let update: ((props: any) => void) | null = null;
-    try {
-      const res = await keplrBuildAndBroadcast(msgs);
-
-      const { id: toastId, update: updateFn } = toast({
-        title: "Broadcasting transaction",
-        description: "Please wait while we broadcast your transaction",
-        duration: Infinity,
-      });
-      id = toastId;
-      update = updateFn;
-      return await monitorTx(res, (args) => updateFn({ id, ...args }));
-    } catch (err) {
-      console.error(err);
-      if (update) {
-        update({
-          id,
-          title: "Error!",
-          description: "There was an error broadcasting your transaction",
-          status: "error",
-          duration: 5000,
-        });
-        update = null;
-      } else {
-        toast({
-          title: "Error!",
-          description: "This transaction is invalid. Check your inputs and try again.",
-          duration: 5000,
-        });
-      }
-    }
-  };
-
-  return { broadcast };
 }
 
-async function monitorTx(txRes: TxResponse, updateFn: (props: any) => void) {
-  const hash = txRes.txhash;
+export async function monitorTx(txResPromise: Promise<DeliverTxResponse>, toast: any) {
+  const { update } = toast({
+    title: "Broadcasting transaction",
+    description: "Your transaction is being broadcasted",
+    duration: 5000,
+  });
+
+  const txRes = await txResPromise;
+
+  const hash = txRes.transactionHash;
   const timeout = new Date().getTime() + 1000 * 30;
 
   while (new Date().getTime() < timeout) {
@@ -60,7 +28,7 @@ async function monitorTx(txRes: TxResponse, updateFn: (props: any) => void) {
     }
 
     if (res.result?.tx_result.code !== 0) {
-      updateFn({
+      update({
         title: "Error!",
         description: "There was an error executing your transaction",
         duration: 5000,
@@ -70,7 +38,7 @@ async function monitorTx(txRes: TxResponse, updateFn: (props: any) => void) {
     }
 
     if (res.result?.tx_result.code === 0) {
-      updateFn({
+      update({
         title: "Success!",
         description: "Your transaction was executed successfully",
         duration: 5000,
@@ -88,7 +56,7 @@ async function monitorTx(txRes: TxResponse, updateFn: (props: any) => void) {
     }
 
     if (res.result?.tx_result.code !== 0) {
-      updateFn({
+      update({
         title: "Error!",
         description: "Your transaction can't be executed",
         duration: 5000,
@@ -106,7 +74,7 @@ async function monitorTx(txRes: TxResponse, updateFn: (props: any) => void) {
     }
   }
 
-  updateFn({
+  update({
     title: "Error!",
     description: "There was an error broadcasting your transaction",
     duration: 5000,

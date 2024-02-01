@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLoaderData } from "react-router";
 import { Params } from "react-router-dom";
-import { useKeplrAddress } from "../keplr";
+import { useAddressContext } from "@/def-hooks/addressContext";
 import { useQuery } from "@tanstack/react-query";
 import Address from "../components/address";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@/components/ui/breadcrumb";
@@ -10,7 +10,7 @@ import AddKeychainPartyForm from "@/components/add-keychain-party-form";
 import CardRow from "@/components/card-row";
 
 function Keychain() {
-  const addr = useKeplrAddress();
+  const { address } = useAddressContext();
   const { keychainAddr } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const krQuery = useQuery({
     queryKey: ["keychain", keychainAddr],

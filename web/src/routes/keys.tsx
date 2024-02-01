@@ -8,7 +8,6 @@
 // } from "@/components/ui/card";
 // import { useLoaderData } from "react-router";
 import { Link, Params } from "react-router-dom";
-import { useKeplrAddress } from "../keplr";
 import {
 	MsgNewKeyRequest,
 	MsgNewKeyRequestResponse,
@@ -49,6 +48,7 @@ import { TxMsgData } from "cosmjs-types/cosmos/base/abci/v1beta1/abci";
 import { keyRequestById } from "@/client/treasury";
 import ProgressStep from "@/components/ui/progress-step";
 import NewKeyButton from "@/components/new-key-button";
+import { useAddressContext } from "@/def-hooks/addressContext";
 
 function sleep(ms: number) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -283,7 +283,7 @@ function KeyRequestDialog({
 }
 
 function KeysPage() {
-	const addr = useKeplrAddress();
+	const { address } = useAddressContext();
 	const [keychainAddress, __] = useKeychainAddress();
 
 	const { state, error, keyRequest, requestKey, reset } = useKeyRequester();

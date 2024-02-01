@@ -1,8 +1,6 @@
-import { chainDescriptor } from "@/keplr";
+import { env } from "@/env";
 import { TxBody, TxRaw } from "@/proto/cosmos/tx/v1beta1/tx_pb";
 import { sha256 } from "js-sha256";
-
-const rpcUrl = chainDescriptor.rpc;
 
 export interface RpcResponse<T> {
   jsonrpc: string;
@@ -16,7 +14,7 @@ export interface RpcResponse<T> {
 }
 
 async function rpcRequest<T>(method: string, params: any) {
-  const res = await fetch(rpcUrl, {
+  const res = await fetch(env.rpcURL, {
     method: "POST",
     body: JSON.stringify({
       jsonrpc: "2.0",

@@ -8,19 +8,19 @@ export async function intentById(id: string) {
     return null;
   }
 
-  const p = path(["wardenprotocol", "intent", "intent_by_id"], { id });
+  const p = path(["wardenprotocol", "warden", "intent", "intent_by_id"], { id });
   const data = await query(p);
   return QueryIntentByIdResponse.fromJson(data, { typeRegistry: registry });
 }
 
 export async function intents() {
-  const p = path(["wardenprotocol", "intent", "intents"]);
+  const p = path(["wardenprotocol", "warden", "intent", "intents"]);
   const data = await query(p);
   return QueryIntentsResponse.fromJson(data, { typeRegistry: registry });
 }
 
 export async function actionsByAddress(address: string, status: ActionStatus = ActionStatus.UNSPECIFIED) {
-  const p = path(["wardenprotocol", "intent", "actions_by_address"], { address, status });
+  const p = path(["wardenprotocol", "warden", "intent", "actions_by_address"], { address, status });
   const data = await query(p);
   return QueryActionsByAddressResponse.fromJson(data, { typeRegistry: registry });
 }
