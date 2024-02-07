@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./docker/Dockerfile-${{ env.REF }}
+          file: ./docker/Dockerfile-warden-stack
           build-args: |
              SERVICE=${{ env.REF }}
              GIT_SHA=${{ env.COMMIT_SHA }}
