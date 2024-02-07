@@ -17,11 +17,11 @@ else
 fi
 
 docker build \
-       --build-arg ARCH="$ARCH" \
-       --build-arg BUILD_DATE="$(git show -s --format=%ci "$commit_hash")"\
-       --build-arg SERVICE=faucet \
-       --build-arg GIT_SHA="$commit_hash" \
-       -t "${DOCKER_REGISTRY}"faucet:latest  \
-       -t "${DOCKER_REGISTRY}"faucet:"$commit_hash_short"  \
-       -f Dockerfile-faucet ..
-
+        --build-arg ARCH="$ARCH" \
+        --build-arg BUILD_DATE="$(git show -s --format=%ci $commit_hash)" \
+        --build-arg SERVICE=faucet \
+        --build-arg GIT_SHA="$commit_hash" \
+        --target faucet \
+        -t "${DOCKER_REGISTRY}"faucet:latest \
+        -t "${DOCKER_REGISTRY}"faucet:"$commit_hash_short" \
+        -f Dockerfile-warden-stack ..
